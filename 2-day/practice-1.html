@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+    canvas {
+        background-color: #000;
+    }
+    </style>
+</head>
+
+<body>
+	<h1>坠落的的星星</h1>
+    <canvas id="canvas" width="300" height="300"></canvas>
+    <script>
+    function Star(centerX, centerY, size, speed, opacity) {
+        this.centerX = centerX;
+        this.centerY = centerY;
+        this.size = size;
+        this.speed = speed;
+        this.opacity = opacity;
+    }
+    Star.prototype.getCenterY = function() {
+        return this.centerY;
+    }
+    Star.prototype.update = function() {
+        this.centerY += this.speed;
+    }
+    Star.prototype.draw = function(ctx) {
+        ctx.beginPath();
+        ctx.arc(this.centerX, this.centerY, this.size, 0, Math.PI * 2, true);
+
+        ctx.shadowColor = 'white';
+        ctx.shadowBlur = this.size;
+        ctx.globalAlpha = this.opacity;
+        ctx.fillStyle = "white";
+        ctx.closePath();
+        ctx.fill();
+    }
+    Star.prototype.reset = function() {
+        this.centerY = 0;
+    }
+    var canvas = document.getElementById('canvas');
+    var ctx = canvas.getContext('2d');
+    var starArr = generateStars(100);
+
+    function generateStars(n) {
+        var starArr = [];
+        for (var i = 0; i < n; i++) {
+            var star = new Star(random(0, 300), random(0, 300), random(1,2), random(0, 2), random(0.4, 1));
+            starArr.push(star);
+        }
+
+        return starArr;
+    }
+
+    function random(min, max) {
+        return Math.random() * (max - min) + min;
+    }
+
+    function main() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        starArr.map(function(star) {
+            star.draw(ctx);
+            star.update();
+            if (star.getCenterY() > canvas.height) {
+                star.reset();
+            }
+        })
+        requestAnimationFrame(main);
+    }
+    main();
+    </script>
+</body>
+
+</html>
