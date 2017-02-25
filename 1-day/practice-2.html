@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+
+<body>
+    <canvas id="canvas1" width="1600" height="1600"></canvas>
+    <script>
+    function random(m, n) {
+        return parseInt(Math.random() * (m - n) + n);
+    }
+    </script>
+    <script>
+    var can = document.getElementById('canvas1');
+    var context = can.getContext('2d');
+    var circleTop = 30;
+    var circleLeft = 30;
+
+    function generateCircleWithText(left, top, text) {
+        var text = text
+
+        context.fillStyle = "red";
+        context.beginPath();
+        var radius = 30; // for example
+        context.arc(left, top, radius, 0, Math.PI * 2);
+        context.closePath();
+        context.fill();
+        context.fillStyle = "black"; // font color to write the text with
+        var font = "bold " + radius + "px serif";
+        context.font = font;
+        console.log(context.font.width);
+        context.textBaseline = "top";
+        context.fillText(text, left - radius / 4, top - radius / 2);
+    }
+
+    function generateLine(left, top) {
+        context.beginPath();
+        context.moveTo(left, top - 30);
+        context.lineTo(left, top - 100 + 30);
+        context.moveTo(circleLeft + 100, circleTop - 30);
+        context.lineTo(circleLeft, circleTop - 100 + 30);
+        context.stroke();
+    }
+
+    function numSeperation(n) {
+        var num = random(n, 1);
+        if (n > 1) {
+            circleTop += 100;
+            circleLeft += 100;
+            generateCircleWithText(circleLeft, circleTop, num);
+            generateCircleWithText(circleLeft + 100, circleTop, n - num);
+            generateLine(circleLeft, circleTop);
+            console.log('left:', num, 'right:', n - num);
+            numSeperation(n - num);
+        }
+    }
+
+    function tree(n) {
+        generateCircleWithText(130, 30, n);
+        numSeperation(n);
+    }
+
+    tree(100);
+    </script>
+</body>
+
+</html>
