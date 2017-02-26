@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+
+<body>
+    <canvas id="canvas" width="600" height="600"></canvas>
+    <script>
+    var canvas = document.getElementById('canvas');
+    var ctx = canvas.getContext('2d');
+    var imgObj = new Image();
+    var isImgLoaded = false;
+    imgObj.onload = function() {
+        isImgLoaded = true;
+    }
+    imgObj.src = "img/normal_walk.png";
+
+    function Girl(imgObj, sx, sy, sw, sh, dx, dy, dw, dh) {
+        this.imgObj = imgObj;
+        this.sx = sx;
+        this.sy = sy;
+        this.sw = sw;
+        this.sh = sh;
+        this.dx = dx;
+        this.dy = dy;
+        this.dw = dw;
+        this.dh = dh;
+        this.count = 0;
+        this.vector = [{
+            sx: 0,
+            sy: 0
+        }, {
+            sx: 60,
+            sy: 0
+        }, {
+            sx: 120,
+            sy: 0
+        }, {
+            sx: 180,
+            sy: 0
+        }, {
+            sx: 0,
+            sy: 98
+        }, {
+            sx: 60,
+            sy: 98
+        }, {
+            sx: 120,
+            sy: 98
+        }, {
+            sx: 180,
+            sy: 98
+        }, {
+            sx: 0,
+            sy: 196
+        }, {
+            sx: 60,
+            sy: 196
+        }, {
+            sx: 120,
+            sy: 196
+        }, {
+            sx: 180,
+            sy: 196
+        }, {
+            sx: 0,
+            sy: 288
+        }, {
+            sx: 60,
+            sy: 288
+        }, {
+            sx: 120,
+            sy: 288
+        }, {
+            sx: 180,
+            sy: 288
+        }]
+    }
+
+    Girl.prototype.update = function() {
+        var currentPosition = this.vector[this.count % 16];
+        this.sx = currentPosition.sx;
+        this.sy = currentPosition.sy;
+        this.count++;
+    }
+
+    Girl.prototype.render = function() {
+        ctx.drawImage(imgObj, this.sx, this.sy, this.sw, this.sh, this.dx, this.dy, this.dw, this.dh);
+    }
+
+    var girl = new Girl(imgObj, 0, 0, 60, 96, 0, 0, 80, 128);
+    var then = new Date();
+
+    function main() {
+        if (isImgLoaded) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            girl.update();
+            girl.render();
+        }
+        setTimeout(function() {
+            requestAnimationFrame(main);
+        }, 100)
+
+    }
+
+    main();
+    </script>
+</body>
+
+</html>
